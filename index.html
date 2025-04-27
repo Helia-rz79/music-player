@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/css/master.css">
+    <link rel="stylesheet" href="assets/fontello/css/fontello.css">
+</head>
+
+<body>
+    <main>
+        <section class="music-player">
+            <audio id="audio" src="assets/music/sickotoy_-_dum_dum.mp3"></audio>
+            <div class="up">
+                <figure>
+                    <img src="assets/img/6.jpg" alt="">
+                </figure>
+                <div class="text">
+                    <h3>Dum Dum</h3>
+                    <h3>Sickotoy, Ilkay Sencan</h3>
+                </div>
+            </div>
+            <section class="player">
+                <div class="line" id="line">
+                    <div class="back"></div>
+                    <div id="fill"></div>
+                    <div id="Fbtn"></div>
+                    <div id="left-line"></div>
+                    <div id="right-line"></div>
+                </div>
+                <div class="time">
+                    <span id="Tpast">0:00</span>
+                    <span id="Tleft">-0:00</span>
+                </div>
+                <div class="buttons">
+                    <button id="back" class="icon-ccw"></button>
+                    <button id="play" class="icon-play"></button>
+                    <button id="next" class="icon-cw"></button>
+                </div>
+            </section>
+        </section>
+    </main>
+</body>
+<script>
+    const audio = document.getElementById('audio')
+    const Tpast = document.getElementById('Tpast')
+    const Tleft = document.getElementById('Tleft')
+    const back = document.getElementById('back')
+    const play = document.getElementById('play')
+    const next = document.getElementById('next')
+    const fill = document.getElementById('fill')
+    const Fbtn = document.getElementById('Fbtn')
+    let flag = false
+
+
+
+    play.addEventListener('click', () => {
+        if (flag) {
+            audio.pause()
+            play.classList.remove('icon-pause')
+            play.classList.add('icon-play')
+            flag = false
+
+        } else {
+            audio.play()
+            play.classList.remove('icon-play')
+            play.classList.add('icon-pause')
+            flag = true
+        }
+
+    })
+
+    function myTime(time) {
+        let minute = parseInt(time / 60)
+        let seconds = parseInt(time - (minute * 60))
+
+        if (seconds > 9) return minute.toString() + ':' + seconds.toString()
+        else return minute.toString() + ':0' + seconds.toString()
+    }
+
+
+    //\\\\
+
+    next.addEventListener('click', ()=>{
+        if(audio.currentTime + 5 > audio.duration) audio.currentTime = audio.duration
+        else audio.currentTime += 5
+    })
+
+    back.addEventListener('click',()=>{
+        if(audio.currentTime - 5 < 0) audio.currentTime = 0
+        else audio.currentTime -= 5
+    
+    })
+
+    //\\\\
+
+
+    //////////////
+    let parent = document.getElementById('line')
+    let drag = false
+    let value = 0
+
+
+    function update() {
+        let pos_x = window.event.clientX
+        let left = document.getElementById('left-line').getBoundingClientRect().left
+        let right = document.getElementById('right-line').getBoundingClientRect().right
+        let width = right - left
+
+        value = (pos_x - left) / width
+        if (value < 0) value = 0
+        else if (value > 1) value = 1
+
+        audio.currentTime = audio.duration * value
+    }
+
+    parent.addEventListener('mousedown', (e) => {
+        if (e.button == 0) {
+            drag = true
+            audio.pause()
+            mousedown()
+        }
+    })
+    document.body.addEventListener('mousemove', (e) => {
+        if (e.button == 0 && drag) {
+            update()
+        }
+    })
+    document.body.addEventListener('mouseup', (e) => {
+        if (e.button == 0 && drag) {
+            drag = false
+        }
+        if(flag){
+            audio.play()
+        }
+    })
+
+
+    ///////////
+
+    parent.addEventListener('click', (e) => {
+        if (e.button == 0) {
+            update()
+        }
+    })
+
+    /////////////
+
+   
+
+
+
+
+
+
+
+       
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //////////////
+
+    audio.addEventListener('timeupdate', () => {
+        Tpast.innerText = myTime(audio.currentTime)
+        Tleft.innerText = "-" + myTime(audio.duration - audio.currentTime)
+        fill.style.width = (audio.currentTime * 100 / audio.duration) + '%'
+        Fbtn.style.left = (audio.currentTime * 100 / audio.duration) + '%'
+
+    })
+
+
+
+
+
+</script>
+
+</html>
