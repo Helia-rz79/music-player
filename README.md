@@ -2,7 +2,7 @@
 ![20](https://github.com/user-attachments/assets/6f24fb93-7b7c-4fdf-a11c-52834db405cf)
 
 
--🔗 [Demo Project]()
+-🔗 [Demo Project](https://helia-rz79.github.io/music-player/)
 
 -🙍 Developed by helia rezaie
 
